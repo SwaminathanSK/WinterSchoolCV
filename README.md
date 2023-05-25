@@ -4,7 +4,7 @@
 ### Team Members:
 1. Swaminathan S K - 22CS30057
 2. Divyansh Sharma - 22GG10016
-3. Tharun Selvam - 22CS
+3. Tharun Selvam - 22CS30033
 
 
 This repository holds the project for Winter School 2023.
