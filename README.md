@@ -13,5 +13,6 @@ We divided the tasks among ourselves and were responsible for the correspondings
 
 The documentations for each task are uploaded in the same repository as a separate folder. Feel free to fork and run the python scripts.
 
+We have accomodated our other learning experiences related to CV and have not stuck only to whatever that was taught during the Winter School. We made sure to use the concepts and tools we learnt along with other tools such as MATLAB, Machine Learning libraries in Python, etc,.
 
 
