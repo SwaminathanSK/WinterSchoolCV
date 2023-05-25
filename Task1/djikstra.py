@@ -13,7 +13,7 @@ import numpy as np
 def inRange(img,x,y):
     return x>=0 and x<img.shape[0] and y>=0 and y<img.shape[1]
 
-image = cv.imread("processedmaze.png")
+image = cv.imread("image_gray2.png")
 
 temp = image.copy()
 

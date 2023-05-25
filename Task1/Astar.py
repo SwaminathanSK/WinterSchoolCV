@@ -15,7 +15,9 @@ def inRange(img,x,y):
     return x>=0 and x<img.shape[0] and y>=0 and y<img.shape[1]
 
 # Takes in the processed image.
-image = cv.imread("processedmaze.png")
+image = cv.imread("image_gray2.png")
+
+image = cv.resize(image, (610, 338), interpolation = cv.INTER_LINEAR)
 
 # We create a copy of the original image to not accidentally change data. This is more of a stretched cautionary step.
 temp = image.copy()
@@ -27,53 +29,71 @@ black = [0, 0, 0]
 found = [0, 255, 255]
 
 # This stores the startXY and endXy co-ordinates
-startXY = (335,139)
-endXY = (226, 720)
+startXY = (274,354)
+endXY = (85, 257)
 
-# We found that (226, 720) being of a different colour caused some bugs. So we changed it to white.
-temp[226, 720] = [255, 255, 255]
-
-
+# open_set = Stores the pixels that have been reached but the neighbors have not been explored yet.
+# closed_set = Stores the pixels that have been reached and the neighbors have been explored. 
 open_set = set([startXY])
 closed_set = set([])
+
+# g is the cost to reach the corresponding vertex from startXY
 g = {}
+
+# parents stores the parent of a particular pixel (Implies that it was reached through the parent pixel)
 parents = {}
 
+# the cost to reach startXY is 0
 g[startXY] = 0 
 
+# declaring the values for the coordinates individually
 startX = startXY[0]
 startY = startXY[1]
 endX = endXY[0]
 endY = endXY[1]
 
+# parent of startXY is itself. We will later use this to reconstruct the path
 parents[startXY] = startXY
 
-
+# setting the flag to zero. If set to zero, that implies the optimum path has been found
 flag = 0
 
+# we mark the explored parts in blue
 temp[(startX, startY)] = blue
 
+# The A* Algorithm's implementation. Starts with a loop that proceeds till the entire image has been explored.
+# If this happens then open_set will have zero elements.
 while len(open_set) != 0:
+    # n is a node that we are about to consider
     n = None
     
+    # The loop checks for the minimum cost + heuristic node in the open_set
     for (i, j) in open_set:
+        # We ran into a problem of overestimating the heuristic function when we declared the heuristic as
+        # |x - x0| + |y - y0|. This was because, the path can be traversed even diagonally. Which might lead to
+        # shorter paths. Thus, we use sqrt((x-x0)^2 + (y-y0)^2) as the heuristic.
         if n == None or g[(i, j)] +  math.sqrt((endX-i)**2+ (endY-j)**2) < g[n] + math.sqrt((n[0]-endX)**2 + (n[1]-endY)**2):
             n = (i, j)
     
+    # Set the coordinates to n[0] and n[1]
     i = n[0]
     j = n[1]
     
+    # These will iterate through the neighbours
     for (r,s) in [(0, 1), (1, 0), (1, 1), (-1, 0), (0, -1), (-1, -1), (1, -1), (-1, 1)]:
         
         if inRange(temp,r+i,s+j):
             
+            # Checks is (r+i, s+j) has already been explored. And also if it is traversable. That is it is not black
             if ((r+i, s+j) not in open_set) and ((r+i, s+j) not in closed_set) and ((temp[i+r, j+s] != black).any()):
                 open_set.add((r+i, s+j))
                 temp[i+r, j+s] = blue
                 parents[(r+i, s+j)] = (i, j)
                 g[(r+i, j+s)] = g[(i, j)] + 1
-                
+            
+            # Runs this condition is the node has already been traversed once before
             elif (temp[i+r, j+s] != black).any():
+                # Checks if the cost is lesser than before
                 if g[(r+i, s+j)]> g[(i, j)] + 1:
                     parents[(r+i, s+j)] = (i, j)
                     g[(r+i, j+s)] = g[(i, j)] + 1
