@@ -98,15 +98,22 @@ while len(open_set) != 0:
                     parents[(r+i, s+j)] = (i, j)
                     g[(r+i, j+s)] = g[(i, j)] + 1
                     
+                    # Opens up the node since it has a newer path allocated
                     if (r+i, s+j) in closed_set:
                         closed_set.remove((r+i, s+j))
                         open_set.add((r+i, s+j))
-                        
+            
+            # if the endXY is reached, then flag is set to 1            
             if (i+r, j+s) == endXY:
                 flag = 1
                 break
-            #cv.waitKey(1)
-            #cv.imshow("Image", temp)
+            '''
+            # Uncomment this to show animated display.
+            cv.waitKey(1)
+            cv.imshow("Image", temp)
+            '''
+            
+    # once done exploring all the neighbors, we add n to the closed set.
     open_set.remove(n)
     closed_set.add(n)
     if flag == 1:
@@ -114,6 +121,8 @@ while len(open_set) != 0:
 
 cv.waitKey(1)
 count = 0
+
+# The code to reconstruct the path
 if flag == 1:
     reconst_path = []
     n = endXY
@@ -128,6 +137,7 @@ if flag == 1:
         count += 1
         temp[i[0]][i[1]] = found
 
+# prints the path length
 print(count)
 cv.imshow("Image", temp)
 cv.waitKey(0)
