@@ -1,4 +1,5 @@
-img1 = imread('bb1.jpg');
+
+img1 = imread('alex.jpg');
 img1 = rgb2gray(img1);
 hsize = 11;
 sigma = 2;
